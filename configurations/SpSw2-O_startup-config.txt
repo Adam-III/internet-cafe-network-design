@@ -1,0 +1,119 @@
+!
+version 15.0
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname SpSw2-O
+!
+ip ftp username Admin
+ip ftp password FTP_SERVER_Pa$$w0rd
+enable password Cisco
+!
+!
+!
+ip ssh version 2
+no ip domain-lookup
+ip domain-name SpSw2-O
+!
+username admin privilege 15 password 0 Cisco
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 40,99 priority 8192
+!
+interface FastEthernet0/1
+ description Connection to Sw2O
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ description Connection to Sw1O
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+ switchport mode trunk
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+ description Connection to MLSw-Office
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan40
+ ip address 172.16.11.3 255.255.255.0
+!
+ip default-gateway 172.16.11.1
+!
+logging trap debugging
+logging 172.16.11.6
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+!
+!
+ntp server 172.16.11.7
+!
+end
+

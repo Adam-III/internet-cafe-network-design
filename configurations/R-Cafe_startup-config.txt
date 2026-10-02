@@ -1,0 +1,133 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R-Cafe
+!
+!
+!
+enable password Cisco
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+username admin privilege 15 password 0 Cisco
+!
+!
+license udi pid CISCO2911/K9 sn FTX15248TT9-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ftp username Admin
+ip ftp password FTP_SERVER_Pa$$w0rd
+ip ssh version 2
+no ip domain-lookup
+ip domain-name R-Cafe
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ ip address 192.168.100.1 255.255.255.252
+ mtu 1476
+ tunnel source GigabitEthernet0/0
+ tunnel destination 209.100.1.2
+!
+!
+interface Tunnel2
+ ip address 192.168.102.1 255.255.255.252
+ mtu 1476
+ tunnel source GigabitEthernet0/0
+ tunnel destination 209.100.1.10
+!
+!
+interface GigabitEthernet0/0
+ ip address 209.100.1.6 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ description Connection to MLSw1-C
+ ip address 192.168.6.2 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ description Connection to MLSw2-C
+ ip address 192.168.6.6 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 10
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 209.100.1.4 0.0.0.3 area 0
+ network 192.168.6.0 0.0.0.3 area 0
+ network 192.168.6.4 0.0.0.3 area 0
+!
+ip nat inside source list 10 interface GigabitEthernet0/0 overload
+ip classless
+ip route 172.16.8.0 255.255.255.0 192.168.100.2 
+ip route 172.16.9.0 255.255.255.0 192.168.100.2 
+ip route 172.16.10.0 255.255.255.0 192.168.100.2 
+ip route 172.16.11.0 255.255.255.0 192.168.100.2 
+ip route 172.16.12.0 255.255.255.252 192.168.100.2 
+ip route 10.0.3.0 255.255.255.0 192.168.102.2 
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0 
+!
+ip flow-export version 9
+!
+!
+access-list 10 permit 192.168.1.0 0.0.0.255
+access-list 10 permit 192.168.2.0 0.0.0.255
+access-list 10 permit 192.168.3.0 0.0.0.255
+access-list 10 permit 192.168.4.0 0.0.0.255
+access-list 10 permit 192.168.5.0 0.0.0.255
+access-list 10 permit 192.168.6.0 0.0.0.255
+!
+!
+!
+!
+!
+logging trap debugging
+logging 172.16.11.6
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+ntp server 172.16.11.7
+!
+end
+

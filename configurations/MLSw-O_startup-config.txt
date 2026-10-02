@@ -1,0 +1,205 @@
+!
+version 12.2(37)SE1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname MLSw-O
+!
+!
+enable password Cisco
+!
+!
+ip dhcp excluded-address 172.16.8.1
+ip dhcp excluded-address 172.16.8.2
+ip dhcp excluded-address 172.16.8.3
+ip dhcp excluded-address 172.16.9.1
+ip dhcp excluded-address 172.16.10.1
+ip dhcp excluded-address 172.16.11.2
+ip dhcp excluded-address 172.16.11.3
+ip dhcp excluded-address 172.16.11.4
+ip dhcp excluded-address 172.16.11.5
+ip dhcp excluded-address 172.16.11.6
+ip dhcp excluded-address 172.16.11.7
+!
+ip dhcp pool VLAN10_MANAGEMENT
+ network 172.16.8.0 255.255.255.0
+ default-router 172.16.8.1
+ dns-server 172.16.11.7
+ip dhcp pool VLAN20_SALES
+ network 172.16.9.0 255.255.255.0
+ default-router 172.16.9.1
+ dns-server 172.16.11.7
+ip dhcp pool VLAN30_ACCOUNTANT
+ network 172.16.10.0 255.255.255.0
+ default-router 172.16.10.1
+ dns-server 172.16.11.7
+ip dhcp pool VLAN40_SERVERS
+ network 172.16.11.0 255.255.255.0
+ default-router 172.16.11.1
+ dns-server 172.16.11.7
+!
+!
+ip routing
+!
+!
+!
+!
+username admin privilege 15 password 0 Cisco
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ftp username Admin
+ip ftp password FTP_SERVER_Pa$$w0rd
+ip ssh version 2
+no ip domain-lookup
+ip domain-name MLSw-O
+!
+!
+spanning-tree mode rapid-pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+ description Connection to SpSw1-O
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/2
+ description Connection to SpSw2-O
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 40,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/3
+ description Connection to Sw3O
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+ no switchport
+ ip address 172.16.12.1 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ mac-address 0010.111e.ce01
+ ip address 172.16.8.1 255.255.255.0
+!
+interface Vlan20
+ mac-address 0010.111e.ce02
+ ip address 172.16.9.1 255.255.255.0
+!
+interface Vlan30
+ mac-address 0010.111e.ce03
+ ip address 172.16.10.1 255.255.255.0
+!
+interface Vlan40
+ mac-address 0010.111e.ce04
+ ip address 172.16.11.1 255.255.255.0
+!
+router ospf 10
+ router-id 11.11.11.11
+ log-adjacency-changes
+ network 172.16.8.0 0.0.0.255 area 0
+ network 172.16.9.0 0.0.0.255 area 0
+ network 172.16.10.0 0.0.0.255 area 0
+ network 172.16.11.0 0.0.0.255 area 0
+ network 172.16.12.0 0.0.0.255 area 0
+!
+ip default-gateway 172.16.12.2
+ip classless
+ip route 0.0.0.0 0.0.0.0 172.16.20.201 
+ip route 0.0.0.0 0.0.0.0 172.16.12.2 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+logging trap debugging
+logging 172.16.11.6
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+!
+!
+ntp server 172.16.11.7
+!
+end
+
